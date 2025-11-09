@@ -102,7 +102,8 @@ union RpcMessage {
     InstalledInfoRequest,
     InstalledInfoResponse,
     OpenUriRequest,
-    OpenUriResponse
+    OpenUriResponse,
+    StepMountingStatusResponse,
 }
 
 enum KeybindId: uint8 {
@@ -359,6 +360,7 @@ table ResetsSettings {
     yaw_reset_smooth_time: float32;
     save_mounting_reset: bool;
     reset_hmd_pitch: bool;
+    step_mounting: bool;
 }
 
 table StayAlignedSettings {
@@ -1130,4 +1132,21 @@ enum UserHeightCalibrationStatus: uint8 {
 table UserHeightRecordingStatusResponse {
     hmdHeight: float;
     status: UserHeightCalibrationStatus;
+}
+
+// -------------- Step Mounting --------------
+
+enum StepMountingStatus: uint8 {
+    NONE = 0,
+    WAITING_FOR_MOVEMENT = 1,
+    WAITING_FOR_REST = 2,
+    PROCESSING = 3,
+    DONE = 4,
+    ERROR_TIMEOUT = 5,
+    ERROR_HIGH_ERROR = 6
+}
+
+table StepMountingStatusResponse {
+    progress: int8;
+    status: StepMountingStatus;
 }

@@ -515,6 +515,9 @@ struct CancelUserHeightCalibrationBuilder;
 struct UserHeightRecordingStatusResponse;
 struct UserHeightRecordingStatusResponseBuilder;
 
+struct StepMountingStatusResponse;
+struct StepMountingStatusResponseBuilder;
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -1411,11 +1414,12 @@ enum class RpcMessage : uint8_t {
   InstalledInfoResponse = 83,
   OpenUriRequest = 84,
   OpenUriResponse = 85,
+  StepMountingStatusResponse = 86,
   MIN = NONE,
-  MAX = OpenUriResponse
+  MAX = StepMountingStatusResponse
 };
 
-inline const RpcMessage (&EnumValuesRpcMessage())[86] {
+inline const RpcMessage (&EnumValuesRpcMessage())[87] {
   static const RpcMessage values[] = {
     RpcMessage::NONE,
     RpcMessage::HeartbeatRequest,
@@ -1502,13 +1506,14 @@ inline const RpcMessage (&EnumValuesRpcMessage())[86] {
     RpcMessage::InstalledInfoRequest,
     RpcMessage::InstalledInfoResponse,
     RpcMessage::OpenUriRequest,
-    RpcMessage::OpenUriResponse
+    RpcMessage::OpenUriResponse,
+    RpcMessage::StepMountingStatusResponse
   };
   return values;
 }
 
 inline const char * const *EnumNamesRpcMessage() {
-  static const char * const names[87] = {
+  static const char * const names[88] = {
     "NONE",
     "HeartbeatRequest",
     "HeartbeatResponse",
@@ -1595,13 +1600,14 @@ inline const char * const *EnumNamesRpcMessage() {
     "InstalledInfoResponse",
     "OpenUriRequest",
     "OpenUriResponse",
+    "StepMountingStatusResponse",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameRpcMessage(RpcMessage e) {
-  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::OpenUriResponse)) return "";
+  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::StepMountingStatusResponse)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesRpcMessage()[index];
 }
@@ -1948,6 +1954,10 @@ template<> struct RpcMessageTraits<solarxr_protocol::rpc::OpenUriRequest> {
 
 template<> struct RpcMessageTraits<solarxr_protocol::rpc::OpenUriResponse> {
   static const RpcMessage enum_value = RpcMessage::OpenUriResponse;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::StepMountingStatusResponse> {
+  static const RpcMessage enum_value = RpcMessage::StepMountingStatusResponse;
 };
 
 bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, RpcMessage type);
@@ -2924,6 +2934,51 @@ inline const char *EnumNameUserHeightCalibrationStatus(UserHeightCalibrationStat
   if (flatbuffers::IsOutRange(e, UserHeightCalibrationStatus::NONE, UserHeightCalibrationStatus::ERROR_TIMEOUT)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesUserHeightCalibrationStatus()[index];
+}
+
+enum class StepMountingStatus : uint8_t {
+  NONE = 0,
+  WAITING_FOR_MOVEMENT = 1,
+  WAITING_FOR_REST = 2,
+  PROCESSING = 3,
+  DONE = 4,
+  ERROR_TIMEOUT = 5,
+  ERROR_HIGH_ERROR = 6,
+  MIN = NONE,
+  MAX = ERROR_HIGH_ERROR
+};
+
+inline const StepMountingStatus (&EnumValuesStepMountingStatus())[7] {
+  static const StepMountingStatus values[] = {
+    StepMountingStatus::NONE,
+    StepMountingStatus::WAITING_FOR_MOVEMENT,
+    StepMountingStatus::WAITING_FOR_REST,
+    StepMountingStatus::PROCESSING,
+    StepMountingStatus::DONE,
+    StepMountingStatus::ERROR_TIMEOUT,
+    StepMountingStatus::ERROR_HIGH_ERROR
+  };
+  return values;
+}
+
+inline const char * const *EnumNamesStepMountingStatus() {
+  static const char * const names[8] = {
+    "NONE",
+    "WAITING_FOR_MOVEMENT",
+    "WAITING_FOR_REST",
+    "PROCESSING",
+    "DONE",
+    "ERROR_TIMEOUT",
+    "ERROR_HIGH_ERROR",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameStepMountingStatus(StepMountingStatus e) {
+  if (flatbuffers::IsOutRange(e, StepMountingStatus::NONE, StepMountingStatus::ERROR_HIGH_ERROR)) return "";
+  const size_t index = static_cast<size_t>(e);
+  return EnumNamesStepMountingStatus()[index];
 }
 
 }  // namespace rpc
@@ -6514,6 +6569,9 @@ struct RpcMessageHeader FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const solarxr_protocol::rpc::OpenUriResponse *message_as_OpenUriResponse() const {
     return message_type() == solarxr_protocol::rpc::RpcMessage::OpenUriResponse ? static_cast<const solarxr_protocol::rpc::OpenUriResponse *>(message()) : nullptr;
   }
+  const solarxr_protocol::rpc::StepMountingStatusResponse *message_as_StepMountingStatusResponse() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::StepMountingStatusResponse ? static_cast<const solarxr_protocol::rpc::StepMountingStatusResponse *>(message()) : nullptr;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<solarxr_protocol::datatypes::TransactionId>(verifier, VT_TX_ID, 4) &&
@@ -6862,6 +6920,10 @@ template<> inline const solarxr_protocol::rpc::OpenUriRequest *RpcMessageHeader:
 
 template<> inline const solarxr_protocol::rpc::OpenUriResponse *RpcMessageHeader::message_as<solarxr_protocol::rpc::OpenUriResponse>() const {
   return message_as_OpenUriResponse();
+}
+
+template<> inline const solarxr_protocol::rpc::StepMountingStatusResponse *RpcMessageHeader::message_as<solarxr_protocol::rpc::StepMountingStatusResponse>() const {
+  return message_as_StepMountingStatusResponse();
 }
 
 struct RpcMessageHeaderBuilder {
@@ -8525,7 +8587,8 @@ struct ResetsSettings FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_ARMS_MOUNTING_RESET_MODE = 6,
     VT_YAW_RESET_SMOOTH_TIME = 8,
     VT_SAVE_MOUNTING_RESET = 10,
-    VT_RESET_HMD_PITCH = 12
+    VT_RESET_HMD_PITCH = 12,
+    VT_STEP_MOUNTING = 14
   };
   bool reset_mounting_feet() const {
     return GetField<uint8_t>(VT_RESET_MOUNTING_FEET, 0) != 0;
@@ -8542,6 +8605,9 @@ struct ResetsSettings FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool reset_hmd_pitch() const {
     return GetField<uint8_t>(VT_RESET_HMD_PITCH, 0) != 0;
   }
+  bool step_mounting() const {
+    return GetField<uint8_t>(VT_STEP_MOUNTING, 0) != 0;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_RESET_MOUNTING_FEET, 1) &&
@@ -8549,6 +8615,7 @@ struct ResetsSettings FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<float>(verifier, VT_YAW_RESET_SMOOTH_TIME, 4) &&
            VerifyField<uint8_t>(verifier, VT_SAVE_MOUNTING_RESET, 1) &&
            VerifyField<uint8_t>(verifier, VT_RESET_HMD_PITCH, 1) &&
+           VerifyField<uint8_t>(verifier, VT_STEP_MOUNTING, 1) &&
            verifier.EndTable();
   }
 };
@@ -8572,6 +8639,9 @@ struct ResetsSettingsBuilder {
   void add_reset_hmd_pitch(bool reset_hmd_pitch) {
     fbb_.AddElement<uint8_t>(ResetsSettings::VT_RESET_HMD_PITCH, static_cast<uint8_t>(reset_hmd_pitch), 0);
   }
+  void add_step_mounting(bool step_mounting) {
+    fbb_.AddElement<uint8_t>(ResetsSettings::VT_STEP_MOUNTING, static_cast<uint8_t>(step_mounting), 0);
+  }
   explicit ResetsSettingsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -8589,9 +8659,11 @@ inline flatbuffers::Offset<ResetsSettings> CreateResetsSettings(
     solarxr_protocol::rpc::ArmsMountingResetMode arms_mounting_reset_mode = solarxr_protocol::rpc::ArmsMountingResetMode::BACK,
     float yaw_reset_smooth_time = 0.0f,
     bool save_mounting_reset = false,
-    bool reset_hmd_pitch = false) {
+    bool reset_hmd_pitch = false,
+    bool step_mounting = false) {
   ResetsSettingsBuilder builder_(_fbb);
   builder_.add_yaw_reset_smooth_time(yaw_reset_smooth_time);
+  builder_.add_step_mounting(step_mounting);
   builder_.add_reset_hmd_pitch(reset_hmd_pitch);
   builder_.add_save_mounting_reset(save_mounting_reset);
   builder_.add_arms_mounting_reset_mode(arms_mounting_reset_mode);
@@ -14039,6 +14111,57 @@ inline flatbuffers::Offset<UserHeightRecordingStatusResponse> CreateUserHeightRe
   return builder_.Finish();
 }
 
+struct StepMountingStatusResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef StepMountingStatusResponseBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_PROGRESS = 4,
+    VT_STATUS = 6
+  };
+  int8_t progress() const {
+    return GetField<int8_t>(VT_PROGRESS, 0);
+  }
+  solarxr_protocol::rpc::StepMountingStatus status() const {
+    return static_cast<solarxr_protocol::rpc::StepMountingStatus>(GetField<uint8_t>(VT_STATUS, 0));
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<int8_t>(verifier, VT_PROGRESS, 1) &&
+           VerifyField<uint8_t>(verifier, VT_STATUS, 1) &&
+           verifier.EndTable();
+  }
+};
+
+struct StepMountingStatusResponseBuilder {
+  typedef StepMountingStatusResponse Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_progress(int8_t progress) {
+    fbb_.AddElement<int8_t>(StepMountingStatusResponse::VT_PROGRESS, progress, 0);
+  }
+  void add_status(solarxr_protocol::rpc::StepMountingStatus status) {
+    fbb_.AddElement<uint8_t>(StepMountingStatusResponse::VT_STATUS, static_cast<uint8_t>(status), 0);
+  }
+  explicit StepMountingStatusResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<StepMountingStatusResponse> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<StepMountingStatusResponse>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<StepMountingStatusResponse> CreateStepMountingStatusResponse(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    int8_t progress = 0,
+    solarxr_protocol::rpc::StepMountingStatus status = solarxr_protocol::rpc::StepMountingStatus::NONE) {
+  StepMountingStatusResponseBuilder builder_(_fbb);
+  builder_.add_status(status);
+  builder_.add_progress(progress);
+  return builder_.Finish();
+}
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -15110,6 +15233,10 @@ inline bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, R
     }
     case RpcMessage::OpenUriResponse: {
       auto ptr = reinterpret_cast<const solarxr_protocol::rpc::OpenUriResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::StepMountingStatusResponse: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::StepMountingStatusResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

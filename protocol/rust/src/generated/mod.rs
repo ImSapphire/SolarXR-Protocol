@@ -190,6 +190,8 @@ pub mod solarxr_protocol {
     pub use self::stay_aligned_relaxed_pose_generated::*;
     mod user_height_calibration_status_generated;
     pub use self::user_height_calibration_status_generated::*;
+    mod step_mounting_status_generated;
+    pub use self::step_mounting_status_generated::*;
     mod keybind_generated;
     pub use self::keybind_generated::*;
     mod keybind_request_generated;
@@ -436,6 +438,8 @@ pub mod solarxr_protocol {
     pub use self::cancel_user_height_calibration_generated::*;
     mod user_height_recording_status_response_generated;
     pub use self::user_height_recording_status_response_generated::*;
+    mod step_mounting_status_response_generated;
+    pub use self::step_mounting_status_response_generated::*;
   } // rpc
   mod message_bundle_generated;
   pub use self::message_bundle_generated::*;

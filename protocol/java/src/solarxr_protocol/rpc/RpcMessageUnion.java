@@ -106,6 +106,7 @@ public class RpcMessageUnion {
   public solarxr_protocol.rpc.InstalledInfoResponseT asInstalledInfoResponse() { return (solarxr_protocol.rpc.InstalledInfoResponseT) value; }
   public solarxr_protocol.rpc.OpenUriRequestT asOpenUriRequest() { return (solarxr_protocol.rpc.OpenUriRequestT) value; }
   public solarxr_protocol.rpc.OpenUriResponseT asOpenUriResponse() { return (solarxr_protocol.rpc.OpenUriResponseT) value; }
+  public solarxr_protocol.rpc.StepMountingStatusResponseT asStepMountingStatusResponse() { return (solarxr_protocol.rpc.StepMountingStatusResponseT) value; }
 
   public static int pack(FlatBufferBuilder builder, RpcMessageUnion _o) {
     switch (_o.type) {
@@ -194,6 +195,7 @@ public class RpcMessageUnion {
       case RpcMessage.InstalledInfoResponse: return solarxr_protocol.rpc.InstalledInfoResponse.pack(builder, _o.asInstalledInfoResponse());
       case RpcMessage.OpenUriRequest: return solarxr_protocol.rpc.OpenUriRequest.pack(builder, _o.asOpenUriRequest());
       case RpcMessage.OpenUriResponse: return solarxr_protocol.rpc.OpenUriResponse.pack(builder, _o.asOpenUriResponse());
+      case RpcMessage.StepMountingStatusResponse: return solarxr_protocol.rpc.StepMountingStatusResponse.pack(builder, _o.asStepMountingStatusResponse());
       default: return 0;
     }
   }

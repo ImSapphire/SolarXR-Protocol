@@ -162,6 +162,8 @@ export { StatusUnassignedHMD, StatusUnassignedHMDT } from './solarxr-protocol/rp
 export { StayAlignedRelaxedPose } from './solarxr-protocol/rpc/stay-aligned-relaxed-pose.js';
 export { StayAlignedSettings, StayAlignedSettingsT } from './solarxr-protocol/rpc/stay-aligned-settings.js';
 export { SteamVRTrackersSetting, SteamVRTrackersSettingT } from './solarxr-protocol/rpc/steam-vrtrackers-setting.js';
+export { StepMountingStatus } from './solarxr-protocol/rpc/step-mounting-status.js';
+export { StepMountingStatusResponse, StepMountingStatusResponseT } from './solarxr-protocol/rpc/step-mounting-status-response.js';
 export { StopWifiProvisioningRequest, StopWifiProvisioningRequestT } from './solarxr-protocol/rpc/stop-wifi-provisioning-request.js';
 export { TapDetectionSettings, TapDetectionSettingsT } from './solarxr-protocol/rpc/tap-detection-settings.js';
 export { TapDetectionSetupNotification, TapDetectionSetupNotificationT } from './solarxr-protocol/rpc/tap-detection-setup-notification.js';
