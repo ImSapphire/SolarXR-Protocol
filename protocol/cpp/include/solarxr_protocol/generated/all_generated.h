@@ -5085,7 +5085,8 @@ struct ServerGuards FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_CANDOMOUNTING = 4,
     VT_CANDOYAWRESET = 6,
-    VT_CANDOUSERHEIGHTCALIBRATION = 8
+    VT_CANDOUSERHEIGHTCALIBRATION = 8,
+    VT_CANDOSTEPMOUNTING = 10
   };
   bool canDoMounting() const {
     return GetField<uint8_t>(VT_CANDOMOUNTING, 0) != 0;
@@ -5096,11 +5097,15 @@ struct ServerGuards FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool canDoUserHeightCalibration() const {
     return GetField<uint8_t>(VT_CANDOUSERHEIGHTCALIBRATION, 0) != 0;
   }
+  bool canDoStepMounting() const {
+    return GetField<uint8_t>(VT_CANDOSTEPMOUNTING, 0) != 0;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_CANDOMOUNTING, 1) &&
            VerifyField<uint8_t>(verifier, VT_CANDOYAWRESET, 1) &&
            VerifyField<uint8_t>(verifier, VT_CANDOUSERHEIGHTCALIBRATION, 1) &&
+           VerifyField<uint8_t>(verifier, VT_CANDOSTEPMOUNTING, 1) &&
            verifier.EndTable();
   }
 };
@@ -5118,6 +5123,9 @@ struct ServerGuardsBuilder {
   void add_canDoUserHeightCalibration(bool canDoUserHeightCalibration) {
     fbb_.AddElement<uint8_t>(ServerGuards::VT_CANDOUSERHEIGHTCALIBRATION, static_cast<uint8_t>(canDoUserHeightCalibration), 0);
   }
+  void add_canDoStepMounting(bool canDoStepMounting) {
+    fbb_.AddElement<uint8_t>(ServerGuards::VT_CANDOSTEPMOUNTING, static_cast<uint8_t>(canDoStepMounting), 0);
+  }
   explicit ServerGuardsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -5133,8 +5141,10 @@ inline flatbuffers::Offset<ServerGuards> CreateServerGuards(
     flatbuffers::FlatBufferBuilder &_fbb,
     bool canDoMounting = false,
     bool canDoYawReset = false,
-    bool canDoUserHeightCalibration = false) {
+    bool canDoUserHeightCalibration = false,
+    bool canDoStepMounting = false) {
   ServerGuardsBuilder builder_(_fbb);
+  builder_.add_canDoStepMounting(canDoStepMounting);
   builder_.add_canDoUserHeightCalibration(canDoUserHeightCalibration);
   builder_.add_canDoYawReset(canDoYawReset);
   builder_.add_canDoMounting(canDoMounting);

@@ -11,6 +11,7 @@ public class ServerGuardsT {
   private boolean canDoMounting;
   private boolean canDoYawReset;
   private boolean canDoUserHeightCalibration;
+  private boolean canDoStepMounting;
 
   public boolean getCanDoMounting() { return canDoMounting; }
 
@@ -24,11 +25,16 @@ public class ServerGuardsT {
 
   public void setCanDoUserHeightCalibration(boolean canDoUserHeightCalibration) { this.canDoUserHeightCalibration = canDoUserHeightCalibration; }
 
+  public boolean getCanDoStepMounting() { return canDoStepMounting; }
+
+  public void setCanDoStepMounting(boolean canDoStepMounting) { this.canDoStepMounting = canDoStepMounting; }
+
 
   public ServerGuardsT() {
     this.canDoMounting = false;
     this.canDoYawReset = false;
     this.canDoUserHeightCalibration = false;
+    this.canDoStepMounting = false;
   }
 }
 

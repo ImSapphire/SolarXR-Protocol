@@ -10,4 +10,6 @@ table ServerGuards {
     canDoMounting: bool;
     canDoYawReset: bool;
     canDoUserHeightCalibration: bool;
+    // Tell the gui if HMD is available
+    canDoStepMounting: bool;
 }
